@@ -6,9 +6,9 @@
  * [오브젝트 배치]
  * ┌──────────────────────────────────────────────────────────────┐
  * │  objBox1    (청록, 방향키)  pos(-0.6, +0.6)  size(0.3x0.3)  │
- * │  objBox2    (빨강, 고정)    pos(+0.6, +0.6)  size(0.3x0.3)  │  ← PlayerController2 제거
- * │  objCircle1 (노랑, WASD)   pos(-0.3,  0.0)  r=0.3          │  ← PlayerController2 추가
- * │  objCircle2 (보라, 고정)    pos(+0.3,  0.0)  r=0.3          │
+ * │  objBox2    (빨강, 고정)    pos(+0.6, +0.6)  size(0.3x0.3)  │
+ * │  objCircle1 (노랑, WASD)   pos(-0.6, -0.6)   r = 0.3        │
+ * │  objCircle2 (보라, 고정)    pos(+0.6, -0.6)  r = 0.3        │
  * └──────────────────────────────────────────────────────────────┘
  * =================================================================================
  */
@@ -89,7 +89,6 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     gEngine.gfx.LoadVertexShader(&shaders, L"vs", ied, ARRAYSIZE(ied));
     gEngine.gfx.LoadPixelShader(&shaders, L"ps");
 
-    // Box: 로컬 ±0.15 → 월드 0.3x0.3
     std::vector<Vertex> vBox1 =
     {
         { {-0.15f,  0.15f, 0.0f}, {0.0f, 1.0f, 1.0f, 1.0f} },
@@ -129,24 +128,23 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     objBox1->AddComponent(new CollisionTestScript("CyanBox"));
     gEngine.world.push_back(objBox1);
 
-    // 5-2. 빨강 Box — 우상단 (고정 — PlayerController2 없음)
+    // 5-2. 빨강 Box — 우상단 (고정)
     GameObject* objBox2 = new GameObject(0.6f, 0.6f, 0.0f);
     objBox2->AddComponent(new MeshRenderer(meshBox2, mat));
-    // [수정] PlayerController2 제거 → 고정 오브젝트로 변경
     objBox2->AddComponent(new BoxCollider({ 0.3f, 0.3f }));
     objBox2->AddComponent(new CollisionTestScript("RedBox"));
     gEngine.world.push_back(objBox2);
 
-    // 5-3. 노랑 Circle — 화면 중앙 왼쪽 (WASD 이동)
-    GameObject* objCircle1 = new GameObject(-0.3f, 0.0f, 0.0f);
+    // 5-3. 노랑 Circle — 좌하단 (WASD 이동)
+    GameObject* objCircle1 = new GameObject(-0.6f, -0.6f, 0.0f);
     objCircle1->AddComponent(new MeshRenderer(meshCircle1, mat));
-    objCircle1->AddComponent(new PlayerController2());   // [수정] WASD 컨트롤러 추가
+    objCircle1->AddComponent(new PlayerController2());
     objCircle1->AddComponent(new CircleCollider(0.3f));
     objCircle1->AddComponent(new CollisionTestScript("YellowCircle"));
     gEngine.world.push_back(objCircle1);
 
-    // 5-4. 보라 Circle — 화면 중앙 오른쪽 (고정)
-    GameObject* objCircle2 = new GameObject(0.3f, 0.0f, 0.0f);
+    // 5-4. 보라 Circle — 우하단 (고정)
+    GameObject* objCircle2 = new GameObject(0.6f, -0.6f, 0.0f);
     objCircle2->AddComponent(new MeshRenderer(meshCircle2, mat));
     objCircle2->AddComponent(new CircleCollider(0.3f));
     objCircle2->AddComponent(new CollisionTestScript("PurpleCircle"));
